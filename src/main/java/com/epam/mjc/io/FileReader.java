@@ -6,9 +6,14 @@ import java.io.IOException;
 
 
 public class FileReader {
-    public static Profile getDataFromFile(File file) {
+    public Profile getDataFromFile(File file) {
+        String[] parseString = parseFile(file);
+
+        return mapping(parseString);
+    }
+
+    private String[] parseFile(File file) {
         StringBuilder stringBuilder = new StringBuilder();
-        Profile profile = new Profile();
         try (FileInputStream fileInputStream = new FileInputStream(file)) {
             int c;
             while ((c = fileInputStream.read()) != -1) {
@@ -17,7 +22,11 @@ public class FileReader {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        String[] values = stringBuilder.toString().split("\n");
+        return stringBuilder.toString().split("\n");
+    }
+
+    private Profile mapping(String[] values) {
+        Profile profile = new Profile();
 
         profile.setName(values[0].split(":")[1].trim());
         profile.setAge(Integer.valueOf(values[1].split(":")[1].trim()));
